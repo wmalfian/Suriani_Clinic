@@ -1,51 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:contentPadding="16dp">
+    app:contentPadding="16dp"
+    android:backgroundTint="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-<!-- Item -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
 
             <TextView
                 android:id="@+id/tvMedName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Panadol"
+                android:text="Medication Name"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_agenda"
-                app:tint="#666666"/>
+                app:tint="@color/purple_500"/>
         </LinearLayout>
 
         <TextView
             android:id="@+id/tvTimeStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="08:00 AM - 2 tablets after food"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"/>
+            android:text="08:00 AM - Details"
+            android:textSize="15sp"
+            android:textColor="#757575"
+            android:layout_marginBottom="12dp"/>
 
         <TextView
             android:id="@+id/tvStatusDisplay"
@@ -53,7 +54,8 @@
             android:layout_height="wrap_content"
             android:text="Status: Pending"
             android:textAlignment="center"
-            android:textStyle="italic"
+            android:textStyle="bold"
+            android:textSize="16sp"
             android:visibility="gone"
             android:layout_marginBottom="8dp"/>
 
@@ -61,8 +63,7 @@
             android:id="@+id/layoutButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnTaken"
@@ -70,9 +71,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Taken"
-                android:backgroundTint="#4CAF50"
-                android:textColor="#FFFFFF"
-                android:layout_marginEnd="8dp"/>
+                android:backgroundTint="@color/green_success"
+                android:textColor="@color/white"
+                android:layout_marginEnd="6dp"
+                style="@style/Widget.MaterialComponents.Button"/>
 
             <Button
                 android:id="@+id/btnMissed"
@@ -80,11 +82,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Missed"
-                android:backgroundTint="#F44336"
-                android:textColor="#FFFFFF"
-                android:layout_marginStart="8dp"/>
+                android:backgroundTint="@color/red_error"
+                android:textColor="@color/white"
+                android:layout_marginStart="6dp"
+                style="@style/Widget.MaterialComponents.Button"/>
         </LinearLayout>
 
     </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

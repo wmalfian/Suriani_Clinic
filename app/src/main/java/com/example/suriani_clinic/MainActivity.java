@@ -9,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    Button btnAddNew;
+    FloatingActionButton btnAddNew;
     DatabaseHelper myDb;
     ArrayList<Medication> medList;
     MedicationAdapter adapter;
