@@ -20,7 +20,6 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     private ArrayList<Medication> medicationList;
     private DatabaseHelper myDb;
 
-    // Constructor
     public MedicationAdapter(Context context, ArrayList<Medication> medicationList) {
         this.context = context;
         this.medicationList = medicationList;
@@ -30,7 +29,8 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_medication, parent, false);
+        // FIX 1: Changed "item_medication" to "item_medication_card" to match your file name
+        View view = LayoutInflater.from(context).inflate(R.layout.item_medication_card, parent, false);
         return new ViewHolder(view);
     }
 
@@ -41,31 +41,31 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         holder.tvMedName.setText(med.getName());
         holder.tvTimeStatus.setText(med.getDateTime() + " - " + med.getDetails());
 
-        // Logic to show/hide buttons based on Status
+        // FIX 2: Logic to handle Visibility of Buttons vs Status Text
         if (med.getStatus().equals("Pending")) {
             holder.btnLayout.setVisibility(View.VISIBLE);
+            holder.tvStatusDisplay.setVisibility(View.VISIBLE); // Show status text
             holder.tvStatusDisplay.setText("Status: Pending");
             holder.tvStatusDisplay.setTextColor(Color.DKGRAY);
         } else {
-            // If already taken or missed, hide buttons and show status text
+            // If Taken or Missed, hide buttons, show status
             holder.btnLayout.setVisibility(View.GONE);
+            holder.tvStatusDisplay.setVisibility(View.VISIBLE);
             holder.tvStatusDisplay.setText("Status: " + med.getStatus());
 
-            if(med.getStatus().equals("Taken")) {
-                holder.tvStatusDisplay.setTextColor(Color.GREEN);
+            if (med.getStatus().equals("Taken")) {
+                holder.tvStatusDisplay.setTextColor(Color.GREEN); // Or Color.parseColor("#4CAF50")
             } else {
-                holder.tvStatusDisplay.setTextColor(Color.RED);
+                holder.tvStatusDisplay.setTextColor(Color.RED);   // Or Color.parseColor("#F44336")
             }
         }
 
-        // AMIR'S TASK: Button Click Listeners
+        // Button Click Listeners
         holder.btnTaken.setOnClickListener(v -> {
             boolean isUpdated = myDb.updateStatus(med.getId(), "Taken");
             if (isUpdated) {
                 Toast.makeText(context, "Marked as Taken", Toast.LENGTH_SHORT).show();
-                // Update the object in the list and refresh the view
-                // In a real app, you might reload the data from DB here
-                medicationList.get(position).updateStatus("Taken"); // You might need to add a setter in Medication.java
+                med.updateStatus("Taken"); // Requires updateStatus() method in Medication.java
                 notifyItemChanged(position);
             }
         });
@@ -74,7 +74,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
             boolean isUpdated = myDb.updateStatus(med.getId(), "Missed");
             if (isUpdated) {
                 Toast.makeText(context, "Marked as Missed", Toast.LENGTH_SHORT).show();
-                medicationList.get(position).updateStatus("Missed");
+                med.updateStatus("Missed");
                 notifyItemChanged(position);
             }
         });
@@ -85,24 +85,20 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         return medicationList.size();
     }
 
+    // FIX 3: Updated ViewHolder to match your XML IDs exactly
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvMedName, tvTimeStatus, tvStatusDisplay;
         Button btnTaken, btnMissed;
-        View btnLayout; // To hide buttons later
+        View btnLayout; // This refers to the LinearLayout containing the buttons
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvMedName = itemView.findViewById(R.id.tvMedName);
             tvTimeStatus = itemView.findViewById(R.id.tvTimeStatus);
-            // You might need to add a dedicated status TextView in your item_medication.xml
-            // For now, I'm reusing the existing one or assuming you add one.
-            tvStatusDisplay = itemView.findViewById(R.id.tvTimeStatus);
-
+            tvStatusDisplay = itemView.findViewById(R.id.tvStatusDisplay);
             btnTaken = itemView.findViewById(R.id.btnTaken);
             btnMissed = itemView.findViewById(R.id.btnMissed);
-
-            // This is the parent layout of the buttons, to hide them both at once
-            btnLayout = itemView.findViewById(R.id.btnTaken).getParent() instanceof View ? (View) itemView.findViewById(R.id.btnTaken).getParent() : null;
+            btnLayout = itemView.findViewById(R.id.layoutButtons); // Matches ID in your XML
         }
     }
 }

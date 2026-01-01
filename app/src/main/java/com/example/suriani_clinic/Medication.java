@@ -16,10 +16,15 @@ public class Medication {
         this.status = status;
     }
 
-    // Getters (needed to read the data)
+    // Getters
     public String getId() { return id; }
     public String getName() { return name; }
     public String getDetails() { return details; }
     public String getDateTime() { return dateTime; }
     public String getStatus() { return status; }
+
+    // --- ADD THIS METHOD TO FIX THE ERROR ---
+    public void updateStatus(String newStatus) {
+        this.status = newStatus;
+    }
 }
