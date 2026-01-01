@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Medication"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
+
+    <EditText
+        android:id="@+id/etMedName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Medicine Name (e.g. Panadol)" />
+
+    <EditText
+        android:id="@+id/etDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Details (e.g. 2 pills after food)"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/etTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Time (e.g. 08:00 AM)"
+        android:inputType="time"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Record"
+        android:layout_marginTop="30dp"/>
+
+</LinearLayout>
