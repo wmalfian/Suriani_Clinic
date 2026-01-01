@@ -20,6 +20,11 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        // OPTIONAL: Hides the default top bar so your custom XML header looks better
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         recyclerView = findViewById(R.id.recyclerHistory);
         myDb = new DatabaseHelper(this);
         historyList = new ArrayList<>();
@@ -30,7 +35,7 @@ public class HistoryActivity extends AppCompatActivity {
     private void loadHistoryData() {
         Cursor cursor = myDb.getAllHistory();
 
-        if (cursor.getCount() == 0) {
+        if (cursor == null || cursor.getCount() == 0) {
             Toast.makeText(this, "No history found", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
@@ -44,6 +49,7 @@ public class HistoryActivity extends AppCompatActivity {
 
                 historyList.add(new Medication(id, name, details, time, status));
             }
+            cursor.close(); // GOOD PRACTICE: Always close the cursor to save memory
         }
 
         adapter = new HistoryAdapter(this, historyList);

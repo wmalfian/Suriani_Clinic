@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     FloatingActionButton btnAddNew;
+    ImageButton btnHistory;
     DatabaseHelper myDb;
     ArrayList<Medication> medList;
     MedicationAdapter adapter;
@@ -25,12 +27,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); // Make sure this XML has a RecyclerView with id "recyclerView"
 
         recyclerView = findViewById(R.id.recyclerView);
-        btnAddNew = findViewById(R.id.btnAddNew); // Add a button in activity_main.xml to go to Add Activity
+        btnAddNew = findViewById(R.id.btnAddNew);
+        btnHistory = findViewById(R.id.btnViewHistory);// Add a button in activity_main.xml to go to Add Activity
         myDb = new DatabaseHelper(this);
         medList = new ArrayList<>();
 
         btnAddNew.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddMedicationActivity.class);
+            startActivity(intent);
+        });
+
+        btnHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
             startActivity(intent);
         });
 
