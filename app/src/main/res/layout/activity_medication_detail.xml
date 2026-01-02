@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#6200EE"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="?attr/homeAsUpIndicator"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#FFFFFF"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medication Details"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:contentPadding="24dp"
+            app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="24dp">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@android:drawable/ic_menu_agenda"
+                        app:tint="#6200EE"
+                        android:background="@drawable/ic_launcher_background"
+                        android:padding="12dp"/>
+
+                    <TextView
+                        android:id="@+id/tvDetailName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Medication Name"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:layout_marginStart="16dp"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scheduled Time"
+                    android:textSize="14sp"
+                    android:textColor="#757575"/>
+                <TextView
+                    android:id="@+id/tvDetailTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="08:00 AM"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Current Status"
+                    android:textSize="14sp"
+                    android:textColor="#757575"/>
+                <TextView
+                    android:id="@+id/tvDetailStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pending"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#6200EE"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Instructions / Details"
+                    android:textSize="14sp"
+                    android:textColor="#757575"/>
+                <TextView
+                    android:id="@+id/tvDetailInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Take 2 pills with water after eating."
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:lineSpacingExtra="4dp"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
+</LinearLayout>

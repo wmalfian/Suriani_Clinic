@@ -97,4 +97,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Orders by latest added first (ID descending)
         return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COL_ID + " DESC", null);
     }
+
+    public Integer deleteData(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_NAME, "ID = ?", new String[] {id});
+    }
 }

@@ -49,18 +49,27 @@
                 android:textSize="14sp"
                 android:textColor="#757575"
                 android:layout_marginTop="2dp"/>
+
+            <TextView
+                android:id="@+id/tvHistoryStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TAKEN"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:textAllCaps="true"
+                android:textColor="#4CAF50"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvHistoryStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TAKEN"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:letterSpacing="0.05"
-            android:textAllCaps="true"
-            android:textColor="#4CAF50"/>
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#B00020"
+            android:contentDescription="Delete" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

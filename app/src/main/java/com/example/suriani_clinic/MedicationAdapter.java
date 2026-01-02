@@ -1,6 +1,7 @@
 package com.example.suriani_clinic;
 
 import android.content.Context;
+import android.content.Intent; // Added Import
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // FIX 1: Changed "item_medication" to "item_medication_card" to match your file name
+        // Matches your file name "item_medication_card.xml"
         View view = LayoutInflater.from(context).inflate(R.layout.item_medication_card, parent, false);
         return new ViewHolder(view);
     }
@@ -41,10 +42,25 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         holder.tvMedName.setText(med.getName());
         holder.tvTimeStatus.setText(med.getDateTime() + " - " + med.getDetails());
 
-        // FIX 2: Logic to handle Visibility of Buttons vs Status Text
+        // ==================================================================
+        // NEW: Click Listener for the whole card (Opens Detail Activity)
+        // ==================================================================
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, MedicationDetailActivity.class);
+
+            // Pass data to the new activity
+            intent.putExtra("name", med.getName());
+            intent.putExtra("time", med.getDateTime());
+            intent.putExtra("details", med.getDetails());
+            intent.putExtra("status", med.getStatus());
+
+            context.startActivity(intent);
+        });
+
+        // Logic to handle Visibility of Buttons vs Status Text
         if (med.getStatus().equals("Pending")) {
             holder.btnLayout.setVisibility(View.VISIBLE);
-            holder.tvStatusDisplay.setVisibility(View.VISIBLE); // Show status text
+            holder.tvStatusDisplay.setVisibility(View.VISIBLE);
             holder.tvStatusDisplay.setText("Status: Pending");
             holder.tvStatusDisplay.setTextColor(Color.DKGRAY);
         } else {
@@ -54,9 +70,9 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
             holder.tvStatusDisplay.setText("Status: " + med.getStatus());
 
             if (med.getStatus().equals("Taken")) {
-                holder.tvStatusDisplay.setTextColor(Color.GREEN); // Or Color.parseColor("#4CAF50")
+                holder.tvStatusDisplay.setTextColor(Color.GREEN);
             } else {
-                holder.tvStatusDisplay.setTextColor(Color.RED);   // Or Color.parseColor("#F44336")
+                holder.tvStatusDisplay.setTextColor(Color.RED);
             }
         }
 
@@ -65,7 +81,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
             boolean isUpdated = myDb.updateStatus(med.getId(), "Taken");
             if (isUpdated) {
                 Toast.makeText(context, "Marked as Taken", Toast.LENGTH_SHORT).show();
-                med.updateStatus("Taken"); // Requires updateStatus() method in Medication.java
+                med.updateStatus("Taken");
                 notifyItemChanged(position);
             }
         });
@@ -85,11 +101,10 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         return medicationList.size();
     }
 
-    // FIX 3: Updated ViewHolder to match your XML IDs exactly
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvMedName, tvTimeStatus, tvStatusDisplay;
         Button btnTaken, btnMissed;
-        View btnLayout; // This refers to the LinearLayout containing the buttons
+        View btnLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,7 +113,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
             tvStatusDisplay = itemView.findViewById(R.id.tvStatusDisplay);
             btnTaken = itemView.findViewById(R.id.btnTaken);
             btnMissed = itemView.findViewById(R.id.btnMissed);
-            btnLayout = itemView.findViewById(R.id.layoutButtons); // Matches ID in your XML
+            btnLayout = itemView.findViewById(R.id.layoutButtons);
         }
     }
 }
