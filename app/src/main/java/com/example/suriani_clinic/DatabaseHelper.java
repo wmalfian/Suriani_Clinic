@@ -1,4 +1,4 @@
-package com.example.suriani_clinic;// Change this to your actual package name
+package com.example.suriani_clinic;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -79,8 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowsAffected > 0;
     }
 
-    // Helper method to get only "Pending" items for today (Optional useful feature for Dashboard)
-    // Update this method in DatabaseHelper.java
+    // Helper method to get only "Pending" items for today
     public Cursor getPendingMedications() {
         SQLiteDatabase db = this.getReadableDatabase();
         // CHANGED: ORDER BY DATE_TIME ASC (Ascending order: 08:00 AM -> 09:00 PM)
@@ -101,5 +100,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Integer deleteData(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "ID = ?", new String[] {id});
+    }
+
+    // ====================================================================
+    // NEW: UPDATE FUNCTION (Editing Details)
+    // ====================================================================
+    public boolean updateMedication(String id, String name, String details, String time) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_MED_NAME, name);
+        contentValues.put(COL_DETAILS, details);
+        contentValues.put(COL_DATE_TIME, time);
+
+        // We only update the details, not the status
+        int result = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
+        return result > 0;
     }
 }

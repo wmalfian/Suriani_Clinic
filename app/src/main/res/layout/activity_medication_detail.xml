@@ -12,6 +12,7 @@
         android:background="#6200EE"
         android:padding="16dp"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:elevation="4dp">
 
         <ImageButton
@@ -24,13 +25,24 @@
             android:contentDescription="Back" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Medication Details"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:layout_marginStart="8dp"/>
+
+        <ImageButton
+            android:id="@+id/btnEdit"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#FFFFFF"
+            android:contentDescription="Edit" />
+
     </LinearLayout>
 
     <ScrollView
