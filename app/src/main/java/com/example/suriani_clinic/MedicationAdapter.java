@@ -48,6 +48,9 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, MedicationDetailActivity.class);
 
+            //for edit
+            intent.putExtra("id", med.getId());
+
             // Pass data to the new activity
             intent.putExtra("name", med.getName());
             intent.putExtra("time", med.getDateTime());
