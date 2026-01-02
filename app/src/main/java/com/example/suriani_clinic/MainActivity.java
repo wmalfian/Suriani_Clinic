@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper myDb;
     ArrayList<Medication> medList;
     MedicationAdapter adapter;
+    TextView tvEmptyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         btnHistory = findViewById(R.id.btnViewHistory);// Add a button in activity_main.xml to go to Add Activity
         myDb = new DatabaseHelper(this);
         medList = new ArrayList<>();
+        tvEmptyState = findViewById(R.id.tvEmptyState);
 
         btnAddNew.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddMedicationActivity.class);
@@ -54,13 +57,15 @@ public class MainActivity extends AppCompatActivity {
 
     void loadData() {
         medList.clear();
-        Cursor cursor = myDb.getAllHistory(); // Or getPendingMedications() if you want to filter
 
-        if (cursor.getCount() == 0) {
-            // Show empty state
-        } else {
+        // OLD CODE: Cursor cursor = myDb.getAllHistory();
+        // NEW CODE: Fetch only items that haven't been taken yet
+        Cursor cursor = myDb.getPendingMedications();
+
+        if (cursor != null && cursor.getCount() > 0) {
+            tvEmptyState.setVisibility(View.GONE);//hide message if we have meds
             while (cursor.moveToNext()) {
-                // Ensure column names match DatabaseHelper exactly
+                // ... existing loop code ...
                 String id = cursor.getString(0);
                 String name = cursor.getString(1);
                 String details = cursor.getString(2);
@@ -69,8 +74,10 @@ public class MainActivity extends AppCompatActivity {
 
                 medList.add(new Medication(id, name, details, time, status));
             }
+            cursor.close();
         }
 
+        // ... adapter setup ...
         adapter = new MedicationAdapter(this, medList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

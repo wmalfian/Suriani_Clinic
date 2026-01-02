@@ -80,10 +80,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Helper method to get only "Pending" items for today (Optional useful feature for Dashboard)
+    // Update this method in DatabaseHelper.java
     public Cursor getPendingMedications() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        // Simple query for pending items. You can add date filtering logic here later.
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_STATUS + " = 'Pending'", null);
+        SQLiteDatabase db = this.getReadableDatabase();
+        // CHANGED: ORDER BY DATE_TIME ASC (Ascending order: 08:00 AM -> 09:00 PM)
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE STATUS = 'Pending' ORDER BY DATE_TIME ASC", null);
     }
 
     // ====================================================================
