@@ -10,8 +10,8 @@
 
     <View
         android:id="@+id/viewHeader"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_width="411dp"
+        android:layout_height="147dp"
         android:background="@color/purple_500"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
@@ -69,7 +69,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="411dp"
-        android:layout_height="551dp"
+        android:layout_height="585dp"
         android:clipToPadding="false"
         android:paddingHorizontal="16dp"
         android:paddingBottom="80dp"
