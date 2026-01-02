@@ -2,6 +2,7 @@ package com.example.suriani_clinic;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.ImageButton; // 1. IMPORT THIS
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,42 +15,43 @@ public class HistoryActivity extends AppCompatActivity {
     DatabaseHelper myDb;
     ArrayList<Medication> historyList;
     HistoryAdapter adapter;
+    ImageButton btnBack; // 2. DECLARE THE BUTTON
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        // OPTIONAL: Hides the default top bar so your custom XML header looks better
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         recyclerView = findViewById(R.id.recyclerHistory);
         myDb = new DatabaseHelper(this);
         historyList = new ArrayList<>();
 
+        // 3. FIND THE BUTTON AND ADD LOGIC
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish()); // Closes page -> returns to Dashboard
+
         loadHistoryData();
     }
 
+    // ... rest of your code ...
     private void loadHistoryData() {
         Cursor cursor = myDb.getAllHistory();
 
-        if (cursor == null || cursor.getCount() == 0) {
-            Toast.makeText(this, "No history found", Toast.LENGTH_SHORT).show();
-        } else {
+        if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                // Fetch data from database columns by index
-                // 0=ID, 1=NAME, 2=DETAILS, 3=TIME, 4=STATUS
-                String id = cursor.getString(0);
-                String name = cursor.getString(1);
-                String details = cursor.getString(2);
-                String time = cursor.getString(3);
-                String status = cursor.getString(4);
-
-                historyList.add(new Medication(id, name, details, time, status));
+                historyList.add(new Medication(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4)
+                ));
             }
-            cursor.close(); // GOOD PRACTICE: Always close the cursor to save memory
+            cursor.close();
+        } else {
+            Toast.makeText(this, "No history found", Toast.LENGTH_SHORT).show();
         }
 
         adapter = new HistoryAdapter(this, historyList);
