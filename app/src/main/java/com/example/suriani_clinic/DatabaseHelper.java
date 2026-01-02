@@ -108,12 +108,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateMedication(String id, String name, String details, String time) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_MED_NAME, name);
-        contentValues.put(COL_DETAILS, details);
-        contentValues.put(COL_DATE_TIME, time);
+        contentValues.put("MED_NAME", name);
+        contentValues.put("DETAILS", details);
+        contentValues.put("DATE_TIME", time);
 
-        // We only update the details, not the status
-        int result = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
+        int result = db.update("medication_logs", contentValues, "ID = ?", new String[]{id});
         return result > 0;
     }
 }
