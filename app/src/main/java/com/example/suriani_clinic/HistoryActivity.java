@@ -2,7 +2,8 @@ package com.example.suriani_clinic;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.ImageButton; // 1. IMPORT THIS
+import android.view.View;
+import android.widget.ImageButton; // Import this
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +16,7 @@ public class HistoryActivity extends AppCompatActivity {
     DatabaseHelper myDb;
     ArrayList<Medication> historyList;
     HistoryAdapter adapter;
-    ImageButton btnBack; // 2. DECLARE THE BUTTON
+    ImageButton btnBack; // Declare Back Button
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,17 +26,17 @@ public class HistoryActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         recyclerView = findViewById(R.id.recyclerHistory);
+        btnBack = findViewById(R.id.btnBack); // Find the button
+
         myDb = new DatabaseHelper(this);
         historyList = new ArrayList<>();
 
-        // 3. FIND THE BUTTON AND ADD LOGIC
-        btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish()); // Closes page -> returns to Dashboard
+        // Back Button Logic
+        btnBack.setOnClickListener(v -> finish()); // Closes this page and goes back
 
         loadHistoryData();
     }
 
-    // ... rest of your code ...
     private void loadHistoryData() {
         Cursor cursor = myDb.getAllHistory();
 
