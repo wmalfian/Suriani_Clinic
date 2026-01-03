@@ -35,7 +35,7 @@ public class AddMedicationActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
 
         // You might need to give your header TextView an ID in XML (e.g., tvHeaderTitle)
-        // tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
 
         // CHECK FOR EDIT MODE
         if (getIntent().hasExtra("isEditMode")) {
@@ -49,7 +49,7 @@ public class AddMedicationActivity extends AppCompatActivity {
 
             // Change UI to look like "Edit" mode
             btnSave.setText("Update Schedule");
-            // tvHeaderTitle.setText("Edit Record");
+            tvHeaderTitle.setText("Edit Record");
         }
 
         btnBack.setOnClickListener(v -> finish());
