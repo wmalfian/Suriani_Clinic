@@ -49,28 +49,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             holder.tvStatus.setTextColor(Color.DKGRAY);
         }
 
-        // 3. DELETE BUTTON LOGIC
-        holder.btnDelete.setOnClickListener(v -> {
-            // Optional: Add a confirmation dialog "Are you sure?"
-            new AlertDialog.Builder(context)
-                    .setTitle("Delete Record")
-                    .setMessage("Are you sure you want to delete this log?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // Perform Delete
-                        Integer deletedRows = myDb.deleteData(med.getId());
-                        if (deletedRows > 0) {
-                            Toast.makeText(context, "Record Deleted", Toast.LENGTH_SHORT).show();
-                            historyList.remove(position); // Remove from list
-                            notifyItemRemoved(position); // Animate removal
-                            notifyItemRangeChanged(position, historyList.size());
-                        } else {
-                            Toast.makeText(context, "Error deleting", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        });
-
         holder.itemView.setOnClickListener(v -> {
             android.content.Intent intent = new android.content.Intent(context, MedicationDetailActivity.class);
             intent.putExtra("name", med.getName());
@@ -93,7 +71,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             tvName = itemView.findViewById(R.id.tvHistoryName);
             tvTime = itemView.findViewById(R.id.tvHistoryTime);
             tvStatus = itemView.findViewById(R.id.tvHistoryStatus);
-            btnDelete = itemView.findViewById(R.id.btnDelete); // 5. Find ID
         }
     }
 }

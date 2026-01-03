@@ -62,14 +62,5 @@
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@android:drawable/ic_menu_delete"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="#B00020"
-            android:contentDescription="Delete" />
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
