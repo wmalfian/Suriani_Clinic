@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="@color/page_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#6200EE"
+        android:background="@color/purple_500"
         android:padding="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -26,6 +26,7 @@
             android:contentDescription="Back" />
 
         <TextView
+            android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Record"
@@ -50,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fill in the details below"
-                android:textColor="#757575"
+                android:textColor="@color/text_secondary"
                 android:textSize="16sp"
                 android:layout_marginBottom="24dp"/>
 
@@ -60,7 +61,7 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 app:contentPadding="20dp"
-                app:cardBackgroundColor="@android:color/white">
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -71,11 +72,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Medicine Name"
+                        android:textColorHint="@color/text_secondary"
+                        app:hintTextColor="@color/purple_500"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMedName"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_primary"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -83,11 +87,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="Dosage / Details"
+                        android:textColorHint="@color/text_secondary"
+                        app:hintTextColor="@color/purple_500"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etDetails"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_primary"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -95,10 +102,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="Select Time"
+                        android:textColorHint="@color/text_secondary"
+                        app:hintTextColor="@color/purple_500"
                         app:startIconDrawable="@android:drawable/ic_menu_recent_history"
-                        app:startIconTint="#6200EE"
+                        app:startIconTint="@color/purple_500"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etTime"
                             android:layout_width="match_parent"
@@ -106,7 +114,8 @@
                             android:focusable="false"
                             android:clickable="true"
                             android:cursorVisible="false"
-                            android:inputType="none" />
+                            android:inputType="none"
+                            android:textColor="@color/text_primary"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
@@ -116,7 +125,7 @@
                         android:text="Save Schedule"
                         android:textSize="16sp"
                         android:layout_marginTop="32dp"
-                        android:backgroundTint="#6200EE"
+                        android:backgroundTint="@color/purple_500"
                         app:cornerRadius="12dp"/>
 
                 </LinearLayout>
