@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton; // Import this
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,28 +32,36 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Medication med = historyList.get(position);
 
+        // 1. Set Name
         holder.tvName.setText(med.getName());
-        holder.tvTime.setText(med.getDateTime() + " - " + med.getDetails());
+
+        // 2. Set Time (This now shows the full Date string from the database)
+        // e.g., "Mon, 12 Jan • 08:00 PM"
+        holder.tvTime.setText(med.getDateTime());
+
+        // 3. Set Status text & Color
         holder.tvStatus.setText(med.getStatus());
 
-        // HIDE THE DELETE BUTTON IN HISTORY
-        holder.btnDelete.setVisibility(View.GONE);
-
         if (med.getStatus().equalsIgnoreCase("Taken")) {
-            holder.tvStatus.setTextColor(Color.parseColor("#4CAF50"));
+            holder.tvStatus.setTextColor(Color.parseColor("#388E3C")); // Green
         } else if (med.getStatus().equalsIgnoreCase("Missed")) {
-            holder.tvStatus.setTextColor(Color.parseColor("#F44336"));
+            holder.tvStatus.setTextColor(Color.parseColor("#D32F2F")); // Red
         } else {
             holder.tvStatus.setTextColor(Color.DKGRAY);
         }
+
+        // 4. Hide Delete Button (History should be permanent)
+        holder.btnDelete.setVisibility(View.GONE);
     }
 
     @Override
-    public int getItemCount() { return historyList.size(); }
+    public int getItemCount() {
+        return historyList.size();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvTime, tvStatus;
-        ImageButton btnDelete; // Must declare it even if we hide it
+        ImageButton btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

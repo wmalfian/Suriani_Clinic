@@ -61,6 +61,7 @@
             app:tabTextColor="#C7B2F3"
             app:tabSelectedTextColor="@android:color/white"
             app:tabIndicatorColor="@android:color/white"
+            app:tabIconTint="@color/tab_icon_color"
             app:tabMode="fixed"
             app:tabGravity="fill"/>
 

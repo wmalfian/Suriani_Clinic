@@ -5,137 +5,151 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    // Database Name and Version
     private static final String DATABASE_NAME = "MedicationLog.db";
-    private static final int DATABASE_VERSION = 1;
+    // 1. INCREMENT VERSION to force update
+    private static final int DATABASE_VERSION = 2;
 
-    // Table Name
-    private static final String TABLE_NAME = "medication_logs";
+    private static final String TABLE_MEDS = "medication_logs";
+    private static final String TABLE_HISTORY = "history_logs"; // New Table
 
-    // Column Names
+    // Common Columns
     private static final String COL_ID = "ID";
     private static final String COL_MED_NAME = "MED_NAME";
-    private static final String COL_DETAILS = "DETAILS";     // e.g. dosage, instructions
-    private static final String COL_DATE_TIME = "DATE_TIME"; // stored as String
-    private static final String COL_STATUS = "STATUS";       // "Pending", "Taken", "Missed"
+    private static final String COL_DETAILS = "DETAILS";
+    private static final String COL_STATUS = "STATUS";
 
-    // Constructor
+    // Meds Table Column
+    private static final String COL_SCHEDULE_TIME = "DATE_TIME"; // e.g., "08:00 AM"
+
+    // History Table Column
+    private static final String COL_LOG_TIMESTAMP = "LOG_TIMESTAMP"; // e.g., "Jan 5, 08:00 AM"
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // 1. Create the Table (Run once when app is installed)
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (" +
+        // Create Schedule Table
+        String createMeds = "CREATE TABLE " + TABLE_MEDS + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_MED_NAME + " TEXT, " +
                 COL_DETAILS + " TEXT, " +
-                COL_DATE_TIME + " TEXT, " +
+                COL_SCHEDULE_TIME + " TEXT, " +
                 COL_STATUS + " TEXT)";
-        db.execSQL(createTable);
+        db.execSQL(createMeds);
+
+        // Create History Table
+        String createHistory = "CREATE TABLE " + TABLE_HISTORY + " (" +
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_MED_NAME + " TEXT, " +
+                COL_DETAILS + " TEXT, " +
+                COL_LOG_TIMESTAMP + " TEXT, " +
+                COL_STATUS + " TEXT)";
+        db.execSQL(createHistory);
     }
 
-    // Upgrade logic (Drop old table if version changes)
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+        // If updating from V1 to V2, create the missing table
+        if (oldVersion < 2) {
+            String createHistory = "CREATE TABLE " + TABLE_HISTORY + " (" +
+                    COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_MED_NAME + " TEXT, " +
+                    COL_DETAILS + " TEXT, " +
+                    COL_LOG_TIMESTAMP + " TEXT, " +
+                    COL_STATUS + " TEXT)";
+            db.execSQL(createHistory);
+        }
     }
 
-    // ====================================================================
-    // MEMBER 1: ALFIAN'S TASK (Adding Data)
-    // ====================================================================
+    // --- METHODS FOR SCHEDULE (HOME) ---
 
-    // Method to insert a new medication record
-    public boolean addMedication(String name, String details, String dateTime) {
+    public boolean addMedication(String name, String details, String time) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(COL_MED_NAME, name);
-        contentValues.put(COL_DETAILS, details);
-        contentValues.put(COL_DATE_TIME, dateTime);
-        contentValues.put(COL_STATUS, "Pending"); // Default status is Pending
-
-        long result = db.insert(TABLE_NAME, null, contentValues);
-        return result != -1; // Returns true if insert was successful
+        ContentValues cv = new ContentValues();
+        cv.put(COL_MED_NAME, name);
+        cv.put(COL_DETAILS, details);
+        cv.put(COL_SCHEDULE_TIME, time);
+        cv.put(COL_STATUS, "Pending");
+        return db.insert(TABLE_MEDS, null, cv) != -1;
     }
 
-    // ====================================================================
-    // MEMBER 2: AMIR'S TASK (Updating Status)
-    // ====================================================================
-
-    // Method to update status to "Taken" or "Missed"
-    public boolean updateStatus(String id, String newStatus) {
+    public boolean updateMedication(String id, String name, String details, String time) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_STATUS, newStatus);
-
-        // Update the row where ID matches the one passed in
-        int rowsAffected = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
-        return rowsAffected > 0;
+        ContentValues cv = new ContentValues();
+        cv.put(COL_MED_NAME, name);
+        cv.put(COL_DETAILS, details);
+        cv.put(COL_SCHEDULE_TIME, time);
+        return db.update(TABLE_MEDS, cv, "ID=?", new String[]{id}) > 0;
     }
 
-    // Helper method to get only "Pending" items for today
+    public boolean updateStatus(String id, String status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_STATUS, status);
+        return db.update(TABLE_MEDS, cv, "ID=?", new String[]{id}) > 0;
+    }
+
     public Cursor getPendingMedications() {
         SQLiteDatabase db = this.getReadableDatabase();
-        // CHANGED: ORDER BY DATE_TIME ASC (Ascending order: 08:00 AM -> 09:00 PM)
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE STATUS = 'Pending' ORDER BY DATE_TIME ASC", null);
+        return db.rawQuery("SELECT * FROM " + TABLE_MEDS + " WHERE STATUS='Pending' ORDER BY " + COL_SCHEDULE_TIME + " ASC", null);
     }
 
-    // ====================================================================
-    // MEMBER 3: SHAHRUL'S TASK (Retrieving History)
-    // ====================================================================
-
-    // Method to get ALL data for the History list
-    public Cursor getAllHistory() {
+    public Cursor getAllMedicationsByName() {
         SQLiteDatabase db = this.getWritableDatabase();
-        // Orders by latest added first (ID descending)
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COL_ID + " DESC", null);
+        return db.rawQuery("SELECT * FROM " + TABLE_MEDS + " ORDER BY " + COL_MED_NAME + " ASC", null);
+    }
+
+    public String getStatus(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT STATUS FROM " + TABLE_MEDS + " WHERE ID=?", new String[]{id});
+        String s = "Pending";
+        if (c.moveToFirst()) s = c.getString(0);
+        c.close();
+        return s;
+    }
+
+    public void resetDailySchedule() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_STATUS, "Pending");
+        db.update(TABLE_MEDS, cv, null, null);
     }
 
     public Integer deleteData(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "ID = ?", new String[] {id});
+        return db.delete(TABLE_MEDS, "ID = ?", new String[] {id});
     }
 
-    // ====================================================================
-    // NEW: UPDATE FUNCTION (Editing Details)
-    // ====================================================================
-    public boolean updateMedication(String id, String name, String details, String time) {
+    // --- NEW: METHODS FOR HISTORY LOGS ---
+
+    // 1. Add to History (Call this when Taken/Missed is clicked)
+    public void addToHistory(String name, String details, String status) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("MED_NAME", name);
-        contentValues.put("DETAILS", details);
-        contentValues.put("DATE_TIME", time);
+        ContentValues cv = new ContentValues();
 
-        int result = db.update("medication_logs", contentValues, "ID = ?", new String[]{id});
-        return result > 0;
+        // Generate nicely formatted date: "Mon, 12 Jan • 08:00 PM"
+        String timestamp = new SimpleDateFormat("EEE, dd MMM • hh:mm a", Locale.getDefault()).format(new Date());
+
+        cv.put(COL_MED_NAME, name);
+        cv.put(COL_DETAILS, details);
+        cv.put(COL_LOG_TIMESTAMP, timestamp); // Saves the current date & time
+        cv.put(COL_STATUS, status);
+
+        db.insert(TABLE_HISTORY, null, cv);
     }
 
-    // Add this inside DatabaseHelper.java
-
-    // Method to get ALL medications (Pending, Taken, or Missed) sorted by Name
-    public Cursor getAllMedicationsByName() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COL_MED_NAME + " ASC", null);
-    }
-
-    // Inside DatabaseHelper.java
-
-    // New Helper Method: Check status of a specific ID
-    public String getStatus(String id) {
+    // 2. Get All History (Now reads from TABLE_HISTORY)
+    public Cursor getAllHistory() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT STATUS FROM " + TABLE_NAME + " WHERE ID=?", new String[]{id});
-
-        String status = "Pending"; // Default
-        if (cursor.moveToFirst()) {
-            status = cursor.getString(0);
-        }
-        cursor.close();
-        return status;
+        // Show newest logs first
+        return db.rawQuery("SELECT * FROM " + TABLE_HISTORY + " ORDER BY " + COL_ID + " DESC", null);
     }
 }
