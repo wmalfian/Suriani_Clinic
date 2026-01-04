@@ -1,11 +1,12 @@
 package com.example.suriani_clinic;
 
 import android.content.Intent;
-import android.content.SharedPreferences; // Import 1
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.Toast; // Added Toast import
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate; // Import 2
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     ViewPagerAdapter viewPagerAdapter;
     FloatingActionButton btnAddNew;
-    ImageButton btnHistory, btnTheme; // Added btnTheme
+    ImageButton btnHistory, btnTheme;
 
     // Key for saving preference
     private static final String PREFS_NAME = "AppPrefs";
@@ -39,34 +40,42 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        // Hide default action bar
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
+        // Initialize Views
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         btnAddNew = findViewById(R.id.btnAddNew);
         btnHistory = findViewById(R.id.btnViewHistory);
-        btnTheme = findViewById(R.id.btnTheme); // Initialize
+        btnTheme = findViewById(R.id.btnTheme);
 
         // 2. THEME BUTTON LOGIC
+        // Set the "Eye" icon (View) which represents appearance
+        btnTheme.setImageResource(android.R.drawable.ic_menu_view);
+
         btnTheme.setOnClickListener(v -> {
             SharedPreferences.Editor editor = settings.edit();
             if (isDarkMode) {
-                // Switch to Light
+                // Currently Dark -> Switch to Light
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 editor.putBoolean(KEY_THEME, false);
+                Toast.makeText(MainActivity.this, "Light Mode Enabled", Toast.LENGTH_SHORT).show();
             } else {
-                // Switch to Dark
+                // Currently Light -> Switch to Dark
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 editor.putBoolean(KEY_THEME, true);
+                Toast.makeText(MainActivity.this, "Dark Mode Enabled", Toast.LENGTH_SHORT).show();
             }
             editor.apply();
-            // Note: The activity will automatically recreate itself to apply changes
+            // The activity will automatically recreate itself here to apply the new theme
         });
 
-        // Setup ViewPager
+        // Setup ViewPager and Adapter
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(viewPagerAdapter);
 
+        // Connect TabLayout with ViewPager
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             if (position == 0) {
                 tab.setText("Home");
@@ -77,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attach();
 
+        // Global Button Listeners
         btnAddNew.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddMedicationActivity.class);
             startActivity(intent);
