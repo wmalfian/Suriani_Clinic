@@ -34,5 +34,10 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".AllMedicationsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 </manifest>

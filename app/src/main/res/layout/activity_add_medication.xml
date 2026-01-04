@@ -94,13 +94,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:hint="Time (e.g. 08:00 AM)"
+                        android:hint="Select Time"
+                        app:startIconDrawable="@android:drawable/ic_menu_recent_history"
+                        app:startIconTint="#6200EE"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="time"/>
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button

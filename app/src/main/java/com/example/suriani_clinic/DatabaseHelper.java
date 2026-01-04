@@ -115,4 +115,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = db.update("medication_logs", contentValues, "ID = ?", new String[]{id});
         return result > 0;
     }
+
+    // Add this inside DatabaseHelper.java
+
+    // Method to get ALL medications (Pending, Taken, or Missed) sorted by Name
+    public Cursor getAllMedicationsByName() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COL_MED_NAME + " ASC", null);
+    }
+
+    // Inside DatabaseHelper.java
+
+    // New Helper Method: Check status of a specific ID
+    public String getStatus(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT STATUS FROM " + TABLE_NAME + " WHERE ID=?", new String[]{id});
+
+        String status = "Pending"; // Default
+        if (cursor.moveToFirst()) {
+            status = cursor.getString(0);
+        }
+        cursor.close();
+        return status;
+    }
 }

@@ -1,7 +1,8 @@
 package com.example.suriani_clinic;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent; // Added Import
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Matches your file name "item_medication_card.xml"
         View view = LayoutInflater.from(context).inflate(R.layout.item_medication_card, parent, false);
         return new ViewHolder(view);
     }
@@ -42,32 +42,22 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         holder.tvMedName.setText(med.getName());
         holder.tvTimeStatus.setText(med.getDateTime() + " - " + med.getDetails());
 
-        // ==================================================================
-        // NEW: Click Listener for the whole card (Opens Detail Activity)
-        // ==================================================================
+        // Card Click Listener (Open Details)
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, MedicationDetailActivity.class);
-
-            //for edit
             intent.putExtra("id", med.getId());
-
-            // Pass data to the new activity
             intent.putExtra("name", med.getName());
             intent.putExtra("time", med.getDateTime());
             intent.putExtra("details", med.getDetails());
             intent.putExtra("status", med.getStatus());
-
             context.startActivity(intent);
         });
 
-        // Logic to handle Visibility of Buttons vs Status Text
+        // Visibility Logic
         if (med.getStatus().equals("Pending")) {
             holder.btnLayout.setVisibility(View.VISIBLE);
-            holder.tvStatusDisplay.setVisibility(View.VISIBLE);
-            holder.tvStatusDisplay.setText("Status: Pending");
-            holder.tvStatusDisplay.setTextColor(Color.DKGRAY);
+            holder.tvStatusDisplay.setVisibility(View.GONE); // Hide status text if buttons are there
         } else {
-            // If Taken or Missed, hide buttons, show status
             holder.btnLayout.setVisibility(View.GONE);
             holder.tvStatusDisplay.setVisibility(View.VISIBLE);
             holder.tvStatusDisplay.setText("Status: " + med.getStatus());
@@ -79,23 +69,42 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
             }
         }
 
-        // Button Click Listeners
+        // --- BUTTON: TAKEN ---
         holder.btnTaken.setOnClickListener(v -> {
-            boolean isUpdated = myDb.updateStatus(med.getId(), "Taken");
-            if (isUpdated) {
-                Toast.makeText(context, "Marked as Taken", Toast.LENGTH_SHORT).show();
-                med.updateStatus("Taken");
-                notifyItemChanged(position);
-            }
+            new AlertDialog.Builder(context)
+                    .setTitle("Confirm Medication")
+                    .setMessage("Have you taken " + med.getName() + "?")
+                    .setPositiveButton("Yes, Taken", (dialog, which) -> {
+                        boolean isUpdated = myDb.updateStatus(med.getId(), "Taken");
+                        if (isUpdated) {
+                            Toast.makeText(context, "Great job!", Toast.LENGTH_SHORT).show();
+                            // Remove from the list immediately
+                            medicationList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, medicationList.size());
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
+        // --- BUTTON: MISSED ---
         holder.btnMissed.setOnClickListener(v -> {
-            boolean isUpdated = myDb.updateStatus(med.getId(), "Missed");
-            if (isUpdated) {
-                Toast.makeText(context, "Marked as Missed", Toast.LENGTH_SHORT).show();
-                med.updateStatus("Missed");
-                notifyItemChanged(position);
-            }
+            new AlertDialog.Builder(context)
+                    .setTitle("Mark as Missed")
+                    .setMessage("Are you sure you missed " + med.getName() + "?")
+                    .setPositiveButton("Yes, Missed", (dialog, which) -> {
+                        boolean isUpdated = myDb.updateStatus(med.getId(), "Missed");
+                        if (isUpdated) {
+                            Toast.makeText(context, "Marked as missed", Toast.LENGTH_SHORT).show();
+                            // Remove from the list immediately
+                            medicationList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, medicationList.size());
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
     }
 
