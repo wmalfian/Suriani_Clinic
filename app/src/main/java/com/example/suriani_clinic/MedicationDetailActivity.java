@@ -24,8 +24,7 @@ public class MedicationDetailActivity extends AppCompatActivity {
         tvTime = findViewById(R.id.tvDetailTime);
         tvStatus = findViewById(R.id.tvDetailStatus);
         tvInfo = findViewById(R.id.tvDetailInfo);
-        btnBack = findViewById(R.id.btnBack);
-        btnEdit = findViewById(R.id.btnEdit); // Make sure you added this button in XML
+        btnBack = findViewById(R.id.btnBack);// Make sure you added this button in XML
 
         // 2. Receive Data (INCLUDING ID)
         medId = getIntent().getStringExtra("id"); // Catch the ID here
@@ -42,20 +41,5 @@ public class MedicationDetailActivity extends AppCompatActivity {
 
         // 4. Back Button
         btnBack.setOnClickListener(v -> finish());
-
-        // 5. EDIT BUTTON LOGIC
-        btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(MedicationDetailActivity.this, AddMedicationActivity.class);
-
-            // Pass the "Edit Mode" signal and the data back to the input form
-            intent.putExtra("isEditMode", true);
-            intent.putExtra("id", medId); // SEND THE ID
-            intent.putExtra("name", name);
-            intent.putExtra("details", details);
-            intent.putExtra("time", time);
-
-            startActivity(intent);
-            finish(); // Close this page so it refreshes when we come back
-        });
     }
 }

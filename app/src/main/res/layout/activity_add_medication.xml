@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Medicine Name"
                         android:textColorHint="@color/text_secondary"
-                        app:hintTextColor="@color/purple_500"
+                        app:hintTextColor="@color/icon_tint"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMedName"
@@ -88,7 +88,7 @@
                         android:layout_marginTop="16dp"
                         android:hint="Dosage / Details"
                         android:textColorHint="@color/text_secondary"
-                        app:hintTextColor="@color/purple_500"
+                        app:hintTextColor="@color/icon_tint"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etDetails"
@@ -103,9 +103,9 @@
                         android:layout_marginTop="16dp"
                         android:hint="Select Time"
                         android:textColorHint="@color/text_secondary"
-                        app:hintTextColor="@color/purple_500"
+                        app:hintTextColor="@color/icon_tint"
                         app:startIconDrawable="@android:drawable/ic_menu_recent_history"
-                        app:startIconTint="@color/purple_500"
+                        app:startIconTint="@color/icon_tint"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etTime"
